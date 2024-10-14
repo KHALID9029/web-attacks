@@ -10,7 +10,19 @@
     <div class="container text-center">
         <h1 class="mt-5">Welcome to Web Attacks Demo</h1>
         <p class="lead">This site demonstrates different web attacks. Head over to the sections to try them out and tell us what attack it represents.</p>
+    
+        <% if (!user) { %>
+            <a href="/login" class="btn btn-primary">Login</a>
+        <% } else { %>
+            <p>You are logged in as <strong><%= user.username %></strong> (<%= user.role %>)</p>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        <% } %>
+    
         <a href="/comments" class="btn btn-primary">Go to Comments Page</a>
+    
+        <% if (user && user.role === 'admin') { %>
+            <a href="/admin" class="btn btn-warning">Go to Admin Panel</a>
+        <% } %>
     </div>
 </body>
 </html>
