@@ -2,10 +2,25 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Use original file name (insecure)
+    }
+});
+
+const upload = multer({ storage: storage });
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 
 app.use(session({
@@ -39,11 +54,18 @@ app.get('/comments', (req, res) => {
 });
 
 // Add a comment (XSS vulnerability demo)
-app.post('/comment', (req, res) => {
+app.post('/comment', upload.single('file'), (req, res) => {
     const { comment } = req.body;
-    comments.push(comment); // Comments are not sanitized (XSS vulnerability)
+
+    if (req.file) {
+        comments.push(`${comment} (File uploaded: <a href="/uploads/${req.file.filename}">${req.file.filename}</a>)`);
+    } else {
+        comments.push(comment); 
+    }
+
     res.redirect('/comments');
 });
+
 
 // Login page
 app.get('/login', (req, res) => {

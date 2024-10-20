@@ -11,7 +11,6 @@
     <div class="container text-center">
         <h1 class="mt-5">Comments Section</h1>
         <img src="/images/fox-mascot.png" alt="Fox Mascot" class="mascot-img">
-        <p class="fox-message">Be careful! Watch for XSS attacks here!</p>
 
         <div class="comment-box">
             <ul class="list-group my-3">
@@ -21,12 +20,18 @@
             </ul>
         </div>
 
-        <h2>Leave a Comment</h2>
-        <form action="/comment" method="POST" class="mb-5">
+        <h2>Leave a Comment and Upload a File</h2>
+        <form action="/comment" method="POST" enctype="multipart/form-data" class="mb-5">
             <div class="form-group">
                 <textarea name="comment" class="form-control" rows="4" placeholder="Write your comment..."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+
+            <div class="form-group mt-3">
+                <label for="file" class="form-label">Upload a file (optional):</label>
+                <input type="file" name="file" class="form-control" style="background-color: #444; color: #fff;">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
         </form>
 
         <a href="/" class="btn btn-secondary">Back to Home</a>
