@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Line Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Execute Commands</h1>
+        <p>This interface allows you to execute system commands.</p>
+
+        <form method="POST" action="http://localhost:3005/execute_command" class="mt-4">
+            <div class="mb-3">
+                <label for="command" class="form-label">Enter Command:</label>
+                <input type="text" name="command" class="form-control" placeholder="e.g., ls, whoami" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Execute</button>
+        </form>
+
+        <!-- Display the result if any -->
+        <% if (output) { %>
+            <h3 class="mt-4">Command Output:</h3>
+            <pre><%- output %></pre>
+        <% } %>
+
+        <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+</body>
+</html>
