@@ -32,6 +32,9 @@ app.get('/', (req, res) => {
 // Comments page (for XSS demo)
 let comments = [];
 app.get('/comments', (req, res) => {
+    if (!req.session.user) {
+        return res.status(403).send('Forbidden: You need to be logged in to access this page.');
+    }
     res.render('comments', { comments: comments });
 });
 

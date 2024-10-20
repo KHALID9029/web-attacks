@@ -5,23 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comments | XSS Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container text-center">
         <h1 class="mt-5">Comments Section</h1>
+        <img src="/images/fox-mascot.png" alt="Fox Mascot" class="mascot-img">
+        <p class="fox-message">Be careful! Watch for XSS attacks here!</p>
 
-        <ul class="list-group my-3">
-            <% comments.forEach(function(comment) { %>
-                <li class="list-group-item"><%- comment %></li>
-            <% }); %>
-        </ul>
+        <div class="comment-box">
+            <ul class="list-group my-3">
+                <% comments.forEach(function(comment) { %>
+                    <li class="list-group-item"><%- comment %></li>
+                <% }); %>
+            </ul>
+        </div>
 
         <h2>Leave a Comment</h2>
         <form action="/comment" method="POST" class="mb-5">
             <div class="form-group">
                 <textarea name="comment" class="form-control" rows="4" placeholder="Write your comment..."></textarea>
             </div>
-            <button type="submit" class="btn btn-success mt-3">Submit Comment</button>
+            <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
         </form>
 
         <a href="/" class="btn btn-secondary">Back to Home</a>
