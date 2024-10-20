@@ -2,10 +2,25 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname); // Use original file name (insecure)
+    }
+});
+
+const upload = multer({ storage: storage });
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 
 app.use(session({
@@ -39,11 +54,18 @@ app.get('/comments', (req, res) => {
 });
 
 // Add a comment (XSS vulnerability demo)
-app.post('/comment', (req, res) => {
+app.post('/comment', upload.single('file'), (req, res) => {
     const { comment } = req.body;
-    comments.push(comment); // Comments are not sanitized (XSS vulnerability)
+
+    if (req.file) {
+        comments.push(`${comment} (File uploaded: <a href="/uploads/${req.file.filename}">${req.file.filename}</a>)`);
+    } else {
+        comments.push(comment); 
+    }
+
     res.redirect('/comments');
 });
+
 
 // Login page
 app.get('/login', (req, res) => {
@@ -86,6 +108,23 @@ app.get('/admin', /* isAdmin,*/ (req, res) => {
     }
 
     res.render('admin');
+});
+
+// File Upload page
+app.get('/upload', (req, res) => {
+    if (!req.session.user) {
+        return res.status(403).send('Forbidden: You need to be logged in to access this page.');
+    }
+    res.render('upload'); 
+});
+
+// Vulnerable file upload route
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (req.file) {
+        res.send(`File uploaded: <a href="/uploads/${req.file.filename}">${req.file.filename}</a>`);
+    } else {
+        res.send('File upload failed.');
+    }
 });
 
 app.listen(3000, () => {
