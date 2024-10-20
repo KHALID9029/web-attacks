@@ -110,22 +110,6 @@ app.get('/admin', /* isAdmin,*/ (req, res) => {
     res.render('admin');
 });
 
-// File Upload page
-app.get('/upload', (req, res) => {
-    if (!req.session.user) {
-        return res.status(403).send('Forbidden: You need to be logged in to access this page.');
-    }
-    res.render('upload'); 
-});
-
-// Vulnerable file upload route
-app.post('/upload', upload.single('file'), (req, res) => {
-    if (req.file) {
-        res.send(`File uploaded: <a href="/uploads/${req.file.filename}">${req.file.filename}</a>`);
-    } else {
-        res.send('File upload failed.');
-    }
-});
 
 app.listen(3000, () => {
     console.log('App listening on port 3000');
