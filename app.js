@@ -88,6 +88,30 @@ app.get('/admin', /* isAdmin,*/ (req, res) => {
     res.render('admin');
 });
 
+// Password change page (only for logged-in users)
+app.get('/change-password', (req, res) => {
+    if (!req.session.user) {
+        return res.status(403).send('Forbidden: You need to be logged in.');
+    }
+    res.render('change-password');
+});
+
+app.post('/change-password', (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const user = users.find(u => u.username === req.session.user.username);
+
+    if (user.password === oldPassword) {
+        user.password = newPassword;  // Update password
+        res.send('Password successfully changed.');
+    } else {
+        res.send('Incorrect current password.');
+    }
+});
+
+app.get('/attacker', (req, res) => {
+    res.render('attacker');
+});
+
 app.listen(3000, () => {
     console.log('App listening on port 3000');
 });
