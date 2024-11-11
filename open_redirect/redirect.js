@@ -16,6 +16,8 @@ app.set('view engine', 'ejs');
 // Directory for views
 app.set('views', path.join(__dirname, 'views'));
 
+const validRedirects = ['/', '/dashboard', '/profile'];
+
 
 // Render the login page
 app.get('/login', (req,res,next)=>{
@@ -31,6 +33,10 @@ app.post('/login', (req, res) => {
     // Simple check for demo purposes
     if (username === 'user' && password === 'user') 
     {
+        if (!validRedirects.includes(redirect))
+        {
+            res.send('Invalid redirect URL');
+        }
         res.redirect(redirect);  // Redirect to intended or custom URL
     } 
     else 
